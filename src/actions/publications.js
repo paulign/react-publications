@@ -1,6 +1,7 @@
 import firebase from '../firebaseConfig';
 import { success as successNotification, error as errorNotification } from 'react-notification-system-redux';
 import { CREATE_PUBLICATION_STOP, CREATE_PUBLICATION_START, UPLOAD_IMAGE_PROGRESS, CHANGE_PUBLICATION_FORM } from "./types";
+import { push } from 'connected-react-router';
 
 export const onChangePublicationForm = (data = {}) => ({
     type: CHANGE_PUBLICATION_FORM, payload: data
@@ -9,6 +10,7 @@ export const onChangePublicationForm = (data = {}) => ({
 export const createPublication = () => async (dispatch, getState) => {
     try {
         const { text, image } = getState().publications;
+        
         if (text) {
             dispatch(startCreate());
 
@@ -22,6 +24,7 @@ export const createPublication = () => async (dispatch, getState) => {
                     await ref.set({ text, id, image: url, created_at });
                     dispatch(stopCreate());
                     dispatch(successNotification({ title: 'Success', message: 'Publication was successfully created!' }));
+                    dispatch(push(`/publications/${id}`));
                 } catch (error) {
                     handleCreatePublicationError(error, dispatch);
                 }

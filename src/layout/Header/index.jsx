@@ -38,7 +38,7 @@ class Header extends Component {
                     <NavbarToggler onClick={this.toggleCollapse} />
                     {!!routes && !!routes.length && (
                         <Collapse isOpen={this.state.isOpen} navbar>
-                            <Nav className="ml-auto" navbar>
+                            <Nav className="mr-auto" navbar>
                                 {routes.map((route, index) => {
                                     return <MenuItem key={index} onClick={isOpen ? this.toggleCollapse : null} {...route} />
                                 })}

@@ -17,7 +17,7 @@ class Main extends Component {
                 <Switch>
                     {routes.map((route, key) => {
                         if (!route.redirect) {
-                            return <Route path={route.path} component={route.component} key={key} />
+                            return <Route path={route.path} exact={!!route.exact} component={route.component} key={key} />
                         }
 
                         return (

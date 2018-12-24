@@ -15,12 +15,6 @@
     @include media-breakpoint-down(sm) {
         height: auto;
     }
-
-    .nav-link {
-        &.active {
-            pointer-events: none;
-        }
-    }
 }
 
 .content-wrapper {
@@ -116,6 +110,12 @@ label {
 
         &:hover {
             box-shadow: 0px 0px 4px 1px rgba(40, 167, 69, 0.79);
+        }
+
+        .publication-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }
