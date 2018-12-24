@@ -6,8 +6,7 @@ const routes = [
     { path: "/publications", showInNav: true, exact: true, title: 'Publications', component: PublicationsList },
     { path: "/publications/:id", title: 'Publication Details', component: PublicationDetails },
     { path: "/create-publication", showInNav: true, title: 'Create New', component: CreatePublication },
-    { redirect: true, redirectTo: "/create-publication" },
-    //{ path: "/", private: true, name: "Home", component: Dashboard }
+    { redirect: true, redirectTo: "/create-publication" }
 ];
 
 export default routes;
