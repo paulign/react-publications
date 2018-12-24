@@ -1,45 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { success } from 'react-notification-system-redux';
-import { Container, FormGroup, Label, Input, Row, Col, Button } from 'reactstrap';
+import { Container, FormGroup, Label, Input, Row, Col, Button, Progress } from 'reactstrap';
 import ImageUpload from '../components/ImageUpload';
+import { createPublication, onChangePublicationForm } from '../actions';
 
 class CreatePublication extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            image: null,
-            text: ''
-        };
-    }
-
     onChangeText = (e) => {
-        this.setState({ text: e.target.value });
+        this.props.onChangePublicationForm({ field: 'text', value: e.target.value });
     }
 
     onDropImage = (files) => {
-        console.log(files);
         const image = { file: files[0], preview: URL.createObjectURL(files[0]) };
-        console.log(image);
-        this.setState({ image });
+        this.props.onChangePublicationForm({ field: 'image', value: image });
     }
 
     onRemoveImage = (e) => {
         e.stopPropagation();
-        this.setState({ image: null });
+        this.props.onChangePublicationForm({ field: 'image', value: null });
+    }
+
+    onCreate = () => {
+        this.props.createPublication();
     }
 
     render() {
-        const { image, text } = this.state;
-
+        const { isCreating, uploadProgress, image, text } = this.props;
         return (
             <Container>
                 <Row className="justify-content-center">
                     <Col md={10} lg={8}>
                         <FormGroup>
                             <Label>Publication text</Label>
-                            <Input value={text} onChange={this.onChangeText} type="textarea" rows={5} />
+                            <Input value={text} onChange={this.onChangeText} placeholder="Type publication text" type="textarea" rows={5} />
                         </FormGroup>
                         <FormGroup>
                             <Label>Publication image</Label>
@@ -49,7 +41,13 @@ class CreatePublication extends Component {
                                 onRemoveImage={this.onRemoveImage}
                             />
                         </FormGroup>
-                        <Button color="primary" onClick={() => this.props.success({ title: 'Success', message: 'Publication was successfully created!' })} size="lg">Publish</Button>
+                        <Button color="primary" disabled={!text || !!isCreating} onClick={this.onCreate} size="lg">Publish</Button>
+                        {!!isCreating && !!image && (
+                            <div>
+                                <div className="text-center">Uploading image: {parseInt(uploadProgress)}%</div>
+                                <Progress animated color={uploadProgress < 100 ? 'primary' : 'success'} value={uploadProgress} />
+                            </div>
+                        )}
                     </Col>
                 </Row>
             </Container>
@@ -57,6 +55,8 @@ class CreatePublication extends Component {
     }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+    ...state.publications
+});
 
-export default connect(mapStateToProps, { success })(CreatePublication);
+export default connect(mapStateToProps, { createPublication, onChangePublicationForm })(CreatePublication);
